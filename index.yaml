@@ -1,0 +1,8 @@
+indexes:
+
+- kind: MyScore
+  properties:
+  - name: name
+    direction: asc
+  - name: score
+    direction: desc
