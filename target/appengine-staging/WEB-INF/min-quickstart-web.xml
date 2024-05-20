@@ -29,9 +29,9 @@
             
         <servlet-name>EndpointsServlet</servlet-name>
             
-        <servlet-class origin="WebDescriptor(file:///home/ludovic_cheron68/webandcloud/target/appengine-staging/WEB-INF/web.xml):0">com.google.api.server.spi.EndpointsServlet</servlet-class>
+        <servlet-class origin="WebDescriptor(file:///home/ludovic_cheron68/tinypet/target/appengine-staging/WEB-INF/web.xml):0">com.google.api.server.spi.EndpointsServlet</servlet-class>
             
-        <init-param origin="WebDescriptor(file:///home/ludovic_cheron68/webandcloud/target/appengine-staging/WEB-INF/web.xml):1">
+        <init-param origin="WebDescriptor(file:///home/ludovic_cheron68/tinypet/target/appengine-staging/WEB-INF/web.xml):1">
                   
             <param-name>services</param-name>
                   
@@ -185,11 +185,21 @@
       
     <servlet>
             
+        <servlet-name>CreatePetitionServlet</servlet-name>
+            
+        <servlet-class origin="@WebServlet(foo.CreatePetitionServlet):30">foo.CreatePetitionServlet</servlet-class>
+            
+        <async-supported origin="@WebServlet(foo.CreatePetitionServlet):31">false</async-supported>
+          
+    </servlet>
+      
+    <servlet>
+            
         <servlet-name>PrefixClean</servlet-name>
             
-        <servlet-class origin="@WebServlet(foo.PrefixClean):30">foo.PrefixClean</servlet-class>
+        <servlet-class origin="@WebServlet(foo.PrefixClean):32">foo.PrefixClean</servlet-class>
             
-        <async-supported origin="@WebServlet(foo.PrefixClean):31">false</async-supported>
+        <async-supported origin="@WebServlet(foo.PrefixClean):33">false</async-supported>
           
     </servlet>
       
@@ -197,9 +207,9 @@
             
         <servlet-name>foo.MsgIndex</servlet-name>
             
-        <servlet-class origin="@WebServlet(foo.MsgIndex):32">foo.MsgIndex</servlet-class>
+        <servlet-class origin="@WebServlet(foo.MsgIndex):34">foo.MsgIndex</servlet-class>
             
-        <async-supported origin="@WebServlet(foo.MsgIndex):33">false</async-supported>
+        <async-supported origin="@WebServlet(foo.MsgIndex):35">false</async-supported>
           
     </servlet>
       
@@ -207,9 +217,9 @@
             
         <servlet-name>FriendServlet</servlet-name>
             
-        <servlet-class origin="@WebServlet(foo.FriendServlet):34">foo.FriendServlet</servlet-class>
+        <servlet-class origin="@WebServlet(foo.FriendServlet):36">foo.FriendServlet</servlet-class>
             
-        <async-supported origin="@WebServlet(foo.FriendServlet):35">false</async-supported>
+        <async-supported origin="@WebServlet(foo.FriendServlet):37">false</async-supported>
           
     </servlet>
       
@@ -217,13 +227,13 @@
             
         <servlet-name>PrefixQuery</servlet-name>
             
-        <servlet-class origin="@WebServlet(foo.PrefixQuery):36">foo.PrefixQuery</servlet-class>
+        <servlet-class origin="@WebServlet(foo.PrefixQuery):38">foo.PrefixQuery</servlet-class>
             
-        <async-supported origin="@WebServlet(foo.PrefixQuery):37">false</async-supported>
+        <async-supported origin="@WebServlet(foo.PrefixQuery):39">false</async-supported>
           
     </servlet>
       
-    <servlet-mapping origin="WebDescriptor(file:///home/ludovic_cheron68/webandcloud/target/appengine-staging/WEB-INF/web.xml):38">
+    <servlet-mapping origin="WebDescriptor(file:///home/ludovic_cheron68/tinypet/target/appengine-staging/WEB-INF/web.xml):40">
             
         <servlet-name>EndpointsServlet</servlet-name>
             
@@ -345,6 +355,14 @@
       
     <servlet-mapping>
             
+        <servlet-name>CreatePetitionServlet</servlet-name>
+            
+        <url-pattern>/create-petition</url-pattern>
+          
+    </servlet-mapping>
+      
+    <servlet-mapping>
+            
         <servlet-name>PrefixClean</servlet-name>
             
         <url-pattern>/prefixclean</url-pattern>
@@ -383,7 +401,7 @@
       
     <locale-encoding-mapping-list>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):41">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):43">
                   
             <locale>de</locale>
                   
@@ -391,7 +409,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):42">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):44">
                   
             <locale>no</locale>
                   
@@ -399,7 +417,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):43">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):45">
                   
             <locale>be</locale>
                   
@@ -407,7 +425,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):44">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):46">
                   
             <locale>fi</locale>
                   
@@ -415,7 +433,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):45">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):47">
                   
             <locale>ru</locale>
                   
@@ -423,7 +441,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):46">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):48">
                   
             <locale>pt</locale>
                   
@@ -431,7 +449,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):47">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):49">
                   
             <locale>bg</locale>
                   
@@ -439,7 +457,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):48">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):50">
                   
             <locale>lt</locale>
                   
@@ -447,7 +465,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):49">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):51">
                   
             <locale>hr</locale>
                   
@@ -455,7 +473,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):50">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):52">
                   
             <locale>lv</locale>
                   
@@ -463,7 +481,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):51">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):53">
                   
             <locale>fr</locale>
                   
@@ -471,7 +489,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):52">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):54">
                   
             <locale>hu</locale>
                   
@@ -479,7 +497,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):53">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):55">
                   
             <locale>zh_TW</locale>
                   
@@ -487,7 +505,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):54">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):56">
                   
             <locale>sh</locale>
                   
@@ -495,7 +513,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):55">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):57">
                   
             <locale>uk</locale>
                   
@@ -503,7 +521,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):56">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):58">
                   
             <locale>sk</locale>
                   
@@ -511,7 +529,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):57">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):59">
                   
             <locale>sl</locale>
                   
@@ -519,7 +537,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):58">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):60">
                   
             <locale>ca</locale>
                   
@@ -527,7 +545,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):59">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):61">
                   
             <locale>mk</locale>
                   
@@ -535,7 +553,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):60">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):62">
                   
             <locale>sq</locale>
                   
@@ -543,7 +561,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):61">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):63">
                   
             <locale>sr</locale>
                   
@@ -551,7 +569,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):62">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):64">
                   
             <locale>sv</locale>
                   
@@ -559,7 +577,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):63">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):65">
                   
             <locale>ko</locale>
                   
@@ -567,7 +585,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):64">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):66">
                   
             <locale>el</locale>
                   
@@ -575,7 +593,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):65">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):67">
                   
             <locale>en</locale>
                   
@@ -583,7 +601,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):66">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):68">
                   
             <locale>is</locale>
                   
@@ -591,7 +609,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):67">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):69">
                   
             <locale>it</locale>
                   
@@ -599,7 +617,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):68">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):70">
                   
             <locale>es</locale>
                   
@@ -607,7 +625,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):69">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):71">
                   
             <locale>iw</locale>
                   
@@ -615,7 +633,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):70">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):72">
                   
             <locale>zh</locale>
                   
@@ -623,7 +641,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):71">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):73">
                   
             <locale>et</locale>
                   
@@ -631,7 +649,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):72">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):74">
                   
             <locale>cs</locale>
                   
@@ -639,7 +657,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):73">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):75">
                   
             <locale>ar</locale>
                   
@@ -647,7 +665,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):74">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):76">
                   
             <locale>ja</locale>
                   
@@ -655,7 +673,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):75">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):77">
                   
             <locale>pl</locale>
                   
@@ -663,7 +681,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):76">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):78">
                   
             <locale>da</locale>
                   
@@ -671,7 +689,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):77">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):79">
                   
             <locale>ro</locale>
                   
@@ -679,7 +697,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):78">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):80">
                   
             <locale>nl</locale>
                   
@@ -687,7 +705,7 @@
                 
         </locale-encoding-mapping>
             
-        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):79">
+        <locale-encoding-mapping origin="DefaultsDescriptor(file:///home/ludovic_cheron68/.cache/google-cloud-tools-java/managed-cloud-sdk/LATEST/google-cloud-sdk/platform/google_appengine/google/appengine/tools/java/docs/webdefault.xml):81">
                   
             <locale>tr</locale>
                   

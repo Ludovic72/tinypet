@@ -3,9 +3,9 @@ indexes:
   properties:
   - name: "friends"
   - name: "age"
-- kind: "Score"
+- kind: "Petition"
   properties:
   - name: "name"
     direction: asc
-  - name: "score"
+  - name: "nbSign"
     direction: desc

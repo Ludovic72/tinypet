@@ -50,6 +50,10 @@ handlers:
   script: unused
   login: optional
   secure: optional
+- url: /create-petition
+  script: unused
+  login: optional
+  secure: optional
 - url: /counttr
   script: unused
   login: optional

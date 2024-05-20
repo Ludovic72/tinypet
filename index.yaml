@@ -1,8 +1,25 @@
 indexes:
 
-- kind: MyScore
+- kind: mypetition
   properties:
   - name: name
     direction: asc
-  - name: score
+  - name: nbSign
     direction: desc
+  - name: dateP
+    direction: desc 
+
+#- kind: MyScore
+#  properties:
+#  - name: name
+#    direction: asc
+#  - name: score
+#    direction: desc
+
+#- kind: Petition
+#  properties:
+#  - name: dateP
+#    direction: desc 
+#  - name: name
+#    direction: asc
+

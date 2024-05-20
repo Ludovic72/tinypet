@@ -2,20 +2,20 @@
 <html>
 <head>
 <meta charset="UTF-8">
+
 <title>DiceGame</title>
+
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
-
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
 <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
-
-
 <script src="https://unpkg.com/mithril/mithril.js"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 
 </head>
 <body>
+
 	<script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
 <script>	
 
@@ -91,7 +91,7 @@ var Login = {
       m("h1", {class: 'title'}, 'The Dice Game'),
       m("div", {
       	   "id":"g_id_onload",
-      	   "data-client_id":"588506488220-pfvirp57eoumio5l6bsdbbcao2f9t68s.apps.googleusercontent.com",
+      	   "data-client_id":"681751757032-j0sin0l00292r7racqo06aaqj1e22obs.apps.googleusercontent.com",
            "data-callback":"handleCredentialResponse"}),
       m("div", {
       	   "class":"g_id_signin",
@@ -99,7 +99,7 @@ var Login = {
       ])
     }
 }
-
+/*
 var DiceGame={
   turn : 0,
   d1 : 1,
@@ -226,6 +226,7 @@ var MyScoreView = {
         ]),
         myScore.list.map(function(item) {
           return m("tr", [
+		    m('td', m('label', item.properties.name)),
             m('td', m('label', item.properties.score)),
           ])
         })
@@ -234,7 +235,7 @@ var MyScoreView = {
   }
 }
 
-
+*/
 
 function onSignIn(googleUser) {
   var profile = googleUser.getBasicProfile();
@@ -244,6 +245,7 @@ function onSignIn(googleUser) {
   Profile.url=profile.getImageUrl();
   m.route.set("/play")
 }
+
 function handleCredentialResponse(response) {
 	console.log("callback called:"+response.credential)
     // decodeJwtResponse() is a custom function defined by you
@@ -257,29 +259,184 @@ function handleCredentialResponse(response) {
     console.log("Image URL: " + responsePayload.picture);
     console.log("Email: " + responsePayload.email);
 
-    DiceGame.name= responsePayload.name
+    //DiceGame.name= responsePayload.name
 	Profile.name= responsePayload.name
     Profile.email= responsePayload.email
     Profile.ID=response.credential
     Profile.url= responsePayload.picture 
-    m.route.set("/secret")
+    m.route.set("/play")
 
  }
 
+var PetitionGame={
+  titre: '',
+  description : '',
+  name : Profile.name,
+  dateP: '',
+  nbSign : 0,
+  play: function(){
+	this.dateP = new Date().toISOString().split('T')[0];
+	console.log("La date du jour: "+this.dateP);
+    Petition.save(this.name, this.titre, this.description, this.nbSign, this.dateP);
+    this.titre = '';
+    this.description = '';
+  }
+}
+var PetitionGameView = {
+    name : Profile.name,
+    titre: "",
+    description: "",
+    nbSign : 0,
+	dateP : '',
+    view: function() {
+        return m("div", [
+            m("h1", "Create a New Petition"),
+           
+              m("label", {class:'level-item'}, "Title"),
+              m("input", {
+                    type: "text",
+                    id: "title",
+                    name: "title",
+                    oninput: function (e) {
+						PetitionGame.titre=e.target.value
+                    },
+                   // oninput: m.withAttr("value", function(value) { PetitionForm.title = value; }),
+                    value: PetitionGame.titre,
+                    required: true
+                }),
+                m("label", {class:'level-item'}, "Description"),
+                m("textarea", {
+                    id: "description",
+                    name: "description",
+                    rows: "4",
+                    oninput: function (e) {
+						PetitionGame.description=e.target.value
+                    },
+                    value: PetitionGame.description,
+                    required: true
+                }),
+              m("button", {
+                  class: 'button is-link', 
+                  onclick: function(e) {
+					PetitionGame.play();
+					console.log("j'envoie ...  la demande depuis bouton");
+				} }, "Submit Petition")
+				  
+        ]);
+    }
+};
 
- var Hello = {
-   view: function() {
-   	return m('div', {class:'container'}, [
-           m("h1", {class: 'title'}, 'The Dice Game'),
-           m('div',{class: 'tile is-ancestor'},[
-               m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(DiceView))),
-               m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(ScoreView))),
-	       m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(MyScoreView))),
-           ])
-       ])
-   }
+var Petition = {
+	    list: [],
+		mylist: [],
+	    loadList: function() {
+	        return m.request({
+	            method: "GET",
+	            url: "_ah/api/myApi/v1/topPetition/"
+	        })
+	        .then(function(result) {
+	          Petition.list = result.items
+	        	console.log("got Petition:",result.items)
+	        	m.redraw(true) 
+	        })
+			
+	    },
+	    save: function(name, titre, description, nbSign, dateP) {
+	    	console.log("saving...",Petition.current, " ", dateP)
+	        return m.request({
+	            method: "GET",
+	            url: "_ah/api/myApi/v1/addPetition/"+Profile.name+"/"+titre+"/"+description+"/"+nbSign+"/"+dateP
+	        })
+	        .then(function(result) {
+	        	console.log("got save Petition:",result)
+	        	Petition.loadList()
+				myPetition.loadList(name)
+	        })
+	    }
+	}
+
+
+var myPetition = {
+    	list: [],
+    	loadList: function(name) {
+	        return m.request({
+	            method: "GET",
+	            url: "_ah/api/myApi/v1/mypetition/"+Profile.name
+	        })
+	        .then(function(result) {
+	            myPetition.list = result.items
+	        	console.log("got myPetition:",result.items)
+	        	m.redraw(true) 
+	        })
+	    }
+	}
+
+var MyPetitionView = {
+  oninit: function() {
+    myPetition.loadList(PetitionGame.name);
+	
+  },
+  view: function() {
+    return m('div', [
+      m('div',{class:'subtitle'},"Mes Petitions"),
+      m('table', {class:'table is-striped'},[
+        m('tr', [
+          m('th', {width:"50px"}, "Petition"),
+        ]),
+        myPetition.list.map(function(item) {
+          return m("tr", [
+		    m('td', m('label', item.properties.name)),
+            m('td', m('label', item.properties.titre)),
+          ])
+        })
+      ])
+    ])
+  }
 }
 
+var PetitionView = {
+  oninit: Petition.loadList,
+  view: function() {
+   	return m('div', [
+	  m('div',{class:'subtitle'},"Top 10 Petition"),
+	  m('table', {class:'table is-striped'},[
+	    m('tr', [
+	      m('th', {width:"20px"}, "Name"),
+	      m('th', {width:"50px"}, "Title"),
+	    ]),
+	    Petition.list.map(function(item) {
+	      return m("tr", [
+  	        m('td', m('label', item.properties.name)),
+	        m('td', m('label', item.properties.titre)),
+			m('td', m('label', item.properties.description)),
+			m('td', m('label', item.properties.nbSign)),
+			m('td', m('label', item.properties.dateP)),
+	      ])
+	    })
+	   ])
+	 ])
+  }
+}
+
+var Hello = {
+            view: function() {
+                return m('div', { class: 'container' }, [
+					          m("h1", { class: 'title' }, 'Create a petition'),
+					          m('div', { class: 'tile is-ancestor' }, [
+						          m("div", { class: 'tile' },  m('div', { class: 'tile is-child box' }, m(PetitionGameView))),
+                      m("div", { class: 'tile' },  m('div', { class: 'tile is-child box' }, m(PetitionView))),
+                      m("div", { class: 'tile' },  m('div', { class: 'tile is-child box' }, m(MyPetitionView))),
+					          ]),
+     /*
+                    m('div', { class: 'tile is-ancestor' }, [
+                        m("div", { class: 'tile' }, m('div', { class: 'tile is-child box' }, m(DiceView))),
+                        m("div", { class: 'tile' }, m('div', { class: 'tile is-child box' }, m(ScoreView))),
+                        m("div", { class: 'tile' }, m('div', { class: 'tile is-child box' }, m(MyScoreView))),
+                    ]),
+                    */
+                ]);
+            }
+        };
 
 m.route(document.body, "/play", {
   "/play": { onmatch: function() {
@@ -299,5 +456,6 @@ m.route(document.body, "/play", {
 
 
 </script>
+
 </body>
 </html>

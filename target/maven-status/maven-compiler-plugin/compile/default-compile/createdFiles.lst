@@ -23,6 +23,7 @@ foo/FriendQuery.class
 foo/MsgIndex.class
 foo/ScoreEndpoint.class
 foo/PrefixServlet.class
+foo/CreatePetitionServlet.class
 foo/CountingTR.class
 foo/TestTransaction.class
 foo/OneTupleTR$1.class

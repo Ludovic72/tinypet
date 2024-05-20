@@ -1,0 +1,11 @@
+<!-- Indices written at Mon, 20 May 2024 19:15:54 UTC -->
+
+<datastore-indexes autoGenerate="true">
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Petition" ancestor="false" source="auto">
+        <property name="name" direction="asc"/>
+        <property name="nbSign" direction="desc"/>
+    </datastore-index>
+
+</datastore-indexes>

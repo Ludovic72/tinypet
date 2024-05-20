@@ -51,11 +51,14 @@ Be sure you loaded this page with "https://"
 <h1>Fetch scores below:</h1>
 
 
-		<p id="toto"></p> <script>
+		<p id="toto"></p> 
+	<script>
     const url = "_ah/api/myApi/v1/topscores"
     fetch(url)
     .then(response => response.text())
     .then(data => document.getElementById('toto').innerHTML = data)
   </script>
+
+
 </body>
 </html>

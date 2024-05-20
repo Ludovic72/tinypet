@@ -38,9 +38,10 @@ import com.google.appengine.api.datastore.Transaction;
 
 @Api(name = "myApi",
      version = "v1",
-     audiences = "927375242383-t21v9ml38tkh2pr30m4hqiflkl3jfohl.apps.googleusercontent.com",
+     audiences = {"927375242383-t21v9ml38tkh2pr30m4hqiflkl3jfohl.apps.googleusercontent.com", 
+	 "681751757032-j0sin0l00292r7racqo06aaqj1e22obs.apps.googleusercontent.com"},
   	 clientIds = {"927375242383-t21v9ml38tkh2pr30m4hqiflkl3jfohl.apps.googleusercontent.com",
-        "927375242383-jm45ei76rdsfv7tmjv58tcsjjpvgkdje.apps.googleusercontent.com",
+        "681751757032-j0sin0l00292r7racqo06aaqj1e22obs.apps.googleusercontent.com",
 /*"588506488220-pfvirp57eoumio5l6bsdbbcao2f9t68s.apps.googleusercontent.com "*/},
      namespace =
      @ApiNamespace(
@@ -233,6 +234,65 @@ public class ScoreEndpoint {
 		datastore.put(e);
 //		datastore.put(pi);
 		txn.commit();
+		return e;
+	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------
+
+	@ApiMethod(name = "petitions", httpMethod = HttpMethod.GET)
+	public List<Entity> petitions() {
+		Query q = new Query("Petition").addSort("name", SortDirection.DESCENDING);
+
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		PreparedQuery pq = datastore.prepare(q);
+		List<Entity> result = pq.asList(FetchOptions.Builder.withLimit(100));
+		return result;
+	}
+
+	@ApiMethod(name = "topPetition", httpMethod = HttpMethod.GET)
+	public List<Entity> topPetition() {
+		Query q = new Query("Petition").addSort("name", SortDirection.DESCENDING);
+
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		PreparedQuery pq = datastore.prepare(q);
+		List<Entity> result = pq.asList(FetchOptions.Builder.withLimit(100));
+		return result;
+	}
+	// /_ah/api/myApi/v1/myPetition/Ludovic%20Cheron
+	@ApiMethod(name = "mypetition", httpMethod = HttpMethod.GET)
+	public List<Entity> mypetition(@Named("name") String name) {//petitions
+
+			// Vérification que le paramètre name n'est pas null ou vide
+			if (name == null || name.isEmpty()) {
+				throw new IllegalArgumentException("Le paramètre 'name' est obligatoire.");
+			}
+			Query q = new Query("Petition").setFilter(new FilterPredicate("name", FilterOperator.EQUAL, name)).addSort("nbSign",
+				SortDirection.DESCENDING);
+        //Query q = new Query("Score").setFilter(new FilterPredicate("name", FilterOperator.EQUAL, name));
+
+			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+			PreparedQuery pq = datastore.prepare(q);
+			List<Entity> result = pq.asList(FetchOptions.Builder.withLimit(10));
+			return result;
+
+	}
+	//url: "_ah/api/myApi/v1/addPetition/"+Profile.name+"/"+titre+"/"+description+"/"+nbSign
+	      
+	@ApiMethod(name = "addPetition", httpMethod = HttpMethod.GET)
+	public Entity addPetition(@Named("name") String name, @Named("titre") String titre,
+	 @Named("description") String description ,@Named("nbSign") int nbSign, @Named("dateP") String dateP) {
+
+		Entity e = new Entity("Petition", "" + name + titre + description + nbSign + dateP);
+
+		e.setProperty("name", name);
+		e.setProperty("titre", titre);
+		e.setProperty("description", description);
+		e.setProperty("nbSign", nbSign);
+		e.setProperty("dateP", dateP);
+		
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		datastore.put(e);
+
 		return e;
 	}
 }
