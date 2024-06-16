@@ -5,6 +5,7 @@ foo/Consistency.class
 foo/OneTupleTR.class
 foo/PrefixClean.class
 foo/Counting.class
+foo/Utilisateur.class
 foo/RandomResult.class
 foo/PostMessage.class
 foo/UsersServlet.class
@@ -21,9 +22,11 @@ counters/TheGlobalCounter.class
 foo/CountingSh.class
 foo/FriendQuery.class
 foo/MsgIndex.class
-foo/ScoreEndpoint.class
+foo/TokenVerifier.class
+foo/Signataire.class
 foo/PrefixServlet.class
 foo/CreatePetitionServlet.class
 foo/CountingTR.class
+foo/Petition.class
 foo/TestTransaction.class
 foo/OneTupleTR$1.class

@@ -1,13 +1,28 @@
 indexes:
 
-- kind: mypetition
+- kind: Petition
   properties:
-  - name: name
+  - name: auteur
+    direction: asc
+  - name: nom
     direction: asc
   - name: nbSign
     direction: desc
-  - name: dateP
-    direction: desc 
+  - name: dateCreationP
+    direction: desc
+  - name: tag
+    direction: asc
+
+- kind: Signataire
+  properties:
+  - name: tagUtilisateur
+    direction: asc
+  - name: pid
+    direction: asc
+  - name: free
+    direction: asc
+  
+
 
 #- kind: MyScore
 #  properties:

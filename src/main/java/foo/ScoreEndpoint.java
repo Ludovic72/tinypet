@@ -1,40 +1,36 @@
 package foo;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.server.spi.auth.common.User;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiMethod.HttpMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.config.Named;
-import com.google.api.server.spi.config.Nullable;
+import com.google.api.server.spi.config.Nullable;					
 import com.google.api.server.spi.response.CollectionResponse;
 import com.google.api.server.spi.response.UnauthorizedException;
-import com.google.api.server.spi.auth.EspAuthenticator;
 
 import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
-import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.PropertyProjection;
-import com.google.appengine.api.datastore.PreparedQuery.TooManyResultsException;
-import com.google.appengine.api.datastore.Query.CompositeFilter;
-import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.QueryResultList;
 import com.google.appengine.api.datastore.Transaction;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 
 @Api(name = "myApi",
      version = "v1",
@@ -43,15 +39,16 @@ import com.google.appengine.api.datastore.Transaction;
   	 clientIds = {"927375242383-t21v9ml38tkh2pr30m4hqiflkl3jfohl.apps.googleusercontent.com",
         "681751757032-j0sin0l00292r7racqo06aaqj1e22obs.apps.googleusercontent.com",
 /*"588506488220-pfvirp57eoumio5l6bsdbbcao2f9t68s.apps.googleusercontent.com "*/},
+
      namespace =
      @ApiNamespace(
 		   ownerDomain = "helloworld.example.com",
 		   ownerName = "helloworld.example.com",
 		   packagePath = "")
      )
+	 
 
 public class ScoreEndpoint {
-
 
 	Random r = new Random();
 
@@ -238,7 +235,7 @@ public class ScoreEndpoint {
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------
-
+	
 	@ApiMethod(name = "petitions", httpMethod = HttpMethod.GET)
 	public List<Entity> petitions() {
 		Query q = new Query("Petition").addSort("name", SortDirection.DESCENDING);
@@ -251,48 +248,167 @@ public class ScoreEndpoint {
 
 	@ApiMethod(name = "topPetition", httpMethod = HttpMethod.GET)
 	public List<Entity> topPetition() {
-		Query q = new Query("Petition").addSort("name", SortDirection.DESCENDING);
+		Query q = new Query("Petition").addSort("auteur", SortDirection.DESCENDING);
 
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		PreparedQuery pq = datastore.prepare(q);
 		List<Entity> result = pq.asList(FetchOptions.Builder.withLimit(100));
 		return result;
+	}//Good
+	
+	@ApiMethod(name = "petitionTag", httpMethod = HttpMethod.GET)
+	public List<Entity> petitionTag(@Named("tag") String tag) throws Exception {//petitions
+
+			Query q = new Query("Petition").setFilter(new FilterPredicate("tag", FilterOperator.EQUAL, tag));
+			
+			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+			PreparedQuery pq = datastore.prepare(q);
+			List<Entity> result = pq.asList(FetchOptions.Builder.withLimit(10));
+			return result;
 	}
-	// /_ah/api/myApi/v1/myPetition/Ludovic%20Cheron
+
+
 	@ApiMethod(name = "mypetition", httpMethod = HttpMethod.GET)
-	public List<Entity> mypetition(@Named("name") String name) {//petitions
+	public List<Entity> mypetition(@Named("token") String token) throws Exception {//petitions
 
 			// Vérification que le paramètre name n'est pas null ou vide
-			if (name == null || name.isEmpty()) {
-				throw new IllegalArgumentException("Le paramètre 'name' est obligatoire.");
+			if (token == null || token.isEmpty()) {
+				throw new IllegalArgumentException("Le paramètre 'token' est obligatoire.");
 			}
-			Query q = new Query("Petition").setFilter(new FilterPredicate("name", FilterOperator.EQUAL, name)).addSort("nbSign",
-				SortDirection.DESCENDING);
-        //Query q = new Query("Score").setFilter(new FilterPredicate("name", FilterOperator.EQUAL, name));
+			GoogleIdToken.Payload payload = TokenVerifier.verifyToken(token);
+			
+			if (payload == null) {
+				throw new IllegalArgumentException("Token invalide.");
+			}
 
+			String email = payload.getEmail();
+			Query q = new Query("Petition").setFilter(new FilterPredicate("auteur", FilterOperator.EQUAL, email))
+			.addSort("auteur", SortDirection.ASCENDING)
+			.addSort("nom", SortDirection.ASCENDING)
+			.addSort("nbSign", SortDirection.DESCENDING)
+			.addSort("dateCreationP", SortDirection.DESCENDING)
+			.addSort("tag", SortDirection.ASCENDING);
 			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 			PreparedQuery pq = datastore.prepare(q);
 			List<Entity> result = pq.asList(FetchOptions.Builder.withLimit(10));
 			return result;
 
+	}//Good
+
+	
+	@ApiMethod(name = "getSignataire", httpMethod = HttpMethod.GET)
+	public Entity getSignataire(Signataire signataire) throws Exception {
+
+		GoogleIdToken.Payload payload =  TokenVerifier.verifyToken(signataire.token);
+		String email = payload.getEmail();
+		return null;
 	}
-	//url: "_ah/api/myApi/v1/addPetition/"+Profile.name+"/"+titre+"/"+description+"/"+nbSign
-	      
-	@ApiMethod(name = "addPetition", httpMethod = HttpMethod.GET)
-	public Entity addPetition(@Named("name") String name, @Named("titre") String titre,
-	 @Named("description") String description ,@Named("nbSign") int nbSign, @Named("dateP") String dateP) {
 
-		Entity e = new Entity("Petition", "" + name + titre + description + nbSign + dateP);
-
-		e.setProperty("name", name);
-		e.setProperty("titre", titre);
-		e.setProperty("description", description);
-		e.setProperty("nbSign", nbSign);
-		e.setProperty("dateP", dateP);
+	@ApiMethod(name = "addPetition", httpMethod = HttpMethod.POST)
+	public Entity addPetition(Petition petition) throws Exception {
 		
+		GoogleIdToken.Payload payload =  TokenVerifier.verifyToken(petition.token);
+		String email = payload.getEmail();
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		datastore.put(e);
+		Transaction txn = datastore.beginTransaction();
+		
+		//String email = TokenVerifier.verifyToken(petition.getToken()).getEmail();
+		Entity e = new Entity("Petition");
+		e.setProperty("auteur", email);
+		e.setProperty("nom", petition.nom);
+		e.setProperty("description", petition.getDescription());
+		e.setProperty("nbSign", 0);
+		e.setProperty("dateCreationP", new Date());
+		e.setProperty("tag", petition.tag);
+
+		datastore.put(txn, e);
+		txn.commit();
 
 		return e;
+	}
+
+	@ApiMethod(name = "addSignataire", httpMethod = HttpMethod.POST)
+	public Entity addSignataire(Signataire signataire) throws Exception {
+    	// Vérifier le token et obtenir l'email
+    	GoogleIdToken.Payload payload = TokenVerifier.verifyToken(signataire.token);
+    	String email = payload.getEmail();
+
+    	// Obtenir le service Datastore
+    	DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    	Query.Filter pidFilter = new Query.FilterPredicate("pid", Query.FilterOperator.EQUAL, signataire.pid);
+    	Query query = new Query("Signataire").setFilter(pidFilter);
+    	PreparedQuery pq = datastore.prepare(query);
+
+    	// Vérifier si l'utilisateur a déjà signé la pétition
+    	for (Entity entity : pq.asIterable()) {
+        	List<String> emails = (List<String>) entity.getProperty("emails");
+        	if (emails != null && emails.contains(email)) {
+           	 	throw new IllegalArgumentException("L'utilisateur a déjà signé cette pétition.");
+        	}
+    	}
+
+    	Transaction txn = datastore.beginTransaction();
+    	try {
+        	// Rechercher ou créer une entité Signataire
+        	Entity signataireEntity = findOrCreateSignataire(datastore, signataire, email, pidFilter, txn);
+
+        	// Rechercher l'entité Petition avec le pid donné
+        	Key petitionKey = createPetitionKey(signataire.pid);
+        	Entity petitionEntity = datastore.get(petitionKey);
+
+        	// Incrémenter le nombre de signatures
+        	long nbSign = (long) petitionEntity.getProperty("nbSign");
+        	petitionEntity.setProperty("nbSign", nbSign + 1);
+        	datastore.put(txn, petitionEntity);
+        	txn.commit();
+        	return signataireEntity;
+    	} catch (Exception e) {
+        	if (txn.isActive()) {
+            	txn.rollback();
+        	}
+       	 	throw e;
+    	}
+	}
+
+	private Entity findOrCreateSignataire(DatastoreService datastore, Signataire signataire, String email, Query.Filter pidFilter, Transaction txn) throws Exception {
+    	Query.Filter freeFilter = new Query.FilterPredicate("free", Query.FilterOperator.EQUAL, true);
+    	Query.Filter compositeFilter = Query.CompositeFilterOperator.and(pidFilter, freeFilter);
+    	Query query = new Query("Signataire").setFilter(compositeFilter);
+    	PreparedQuery pq = datastore.prepare(query);
+    	Entity signataireEntity = pq.asSingleEntity();
+
+    	if (signataireEntity != null) {
+        
+        	List<String> emails = (List<String>) signataireEntity.getProperty("emails");
+        	if (emails == null) {
+        	    emails = new ArrayList<>();
+        	}
+        	emails.add(email);
+       	 	signataireEntity.setProperty("emails", emails);
+
+        
+        	if (emails.size() >= 40000) {
+            	signataireEntity.setProperty("free", false);
+        	}
+    	} else {
+        	// Aucun signataire avec de l'espace libre trouvé, en créer un nouveau
+        	signataireEntity = new Entity("Signataire");
+        	List<String> emails = new ArrayList<>();
+        	emails.add(email);
+        	signataireEntity.setProperty("emails", emails);
+        	signataireEntity.setProperty("pid", signataire.pid);
+        	signataireEntity.setProperty("free", true);
+    	}
+    	datastore.put(txn, signataireEntity);
+    	return signataireEntity;
+	}
+
+	private Key createPetitionKey(String pid) {
+    	try {
+        	long pidLong = Long.parseLong(pid);
+        	return KeyFactory.createKey("Petition", pidLong);
+    	} catch (NumberFormatException e) {
+        	return KeyFactory.createKey("Petition", pid);
+    	}
 	}
 }
