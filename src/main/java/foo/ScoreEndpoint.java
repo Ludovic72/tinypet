@@ -2,7 +2,9 @@ package foo;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
@@ -23,7 +25,6 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.SortDirection;
@@ -51,12 +52,12 @@ import com.google.appengine.api.datastore.KeyFactory;
 public class ScoreEndpoint {
 
 	Random r = new Random();
-
+	/* 
     // remember: return Primitives and enums are not allowed. 
 	@ApiMethod(name = "getRandom", httpMethod = HttpMethod.GET)
 	public RandomResult random() {
 		return new RandomResult(r.nextInt(6) + 1);
-	}
+	}*/
 
 	@ApiMethod(name = "hello", httpMethod = HttpMethod.GET)
 	public User Hello(User user) throws UnauthorizedException {
@@ -65,52 +66,6 @@ public class ScoreEndpoint {
 		}
         System.out.println("Yeah:"+user.toString());
 		return user;
-	}
-
-
-	@ApiMethod(name = "scores", httpMethod = HttpMethod.GET)
-	public List<Entity> scores() {
-		Query q = new Query("Score").addSort("score", SortDirection.DESCENDING);
-
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		PreparedQuery pq = datastore.prepare(q);
-		List<Entity> result = pq.asList(FetchOptions.Builder.withLimit(100));
-		return result;
-	}
-
-	@ApiMethod(name = "topscores", httpMethod = HttpMethod.GET)
-	public List<Entity> topscores() {
-		Query q = new Query("Score").addSort("score", SortDirection.DESCENDING);
-
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		PreparedQuery pq = datastore.prepare(q);
-		List<Entity> result = pq.asList(FetchOptions.Builder.withLimit(10));
-		return result;
-	}
-
-	@ApiMethod(name = "myscores", httpMethod = HttpMethod.GET)
-	public List<Entity> myscores(@Named("name") String name) {
-		Query q = new Query("Score").setFilter(new FilterPredicate("name", FilterOperator.EQUAL, name)).addSort("score",
-				SortDirection.DESCENDING);
-        //Query q = new Query("Score").setFilter(new FilterPredicate("name", FilterOperator.EQUAL, name));
-
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		PreparedQuery pq = datastore.prepare(q);
-		List<Entity> result = pq.asList(FetchOptions.Builder.withLimit(10));
-		return result;
-	}
-
-	@ApiMethod(name = "addScore", httpMethod = HttpMethod.GET)
-	public Entity addScore(@Named("score") int score, @Named("name") String name) {
-
-		Entity e = new Entity("Score", "" + name + score);
-		e.setProperty("name", name);
-		e.setProperty("score", score);
-
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		datastore.put(e);
-
-		return e;
 	}
 
 	@ApiMethod(name = "postMessage", httpMethod = HttpMethod.POST)
@@ -238,7 +193,8 @@ public class ScoreEndpoint {
 	
 	@ApiMethod(name = "petitions", httpMethod = HttpMethod.GET)
 	public List<Entity> petitions() {
-		Query q = new Query("Petition").addSort("name", SortDirection.DESCENDING);
+		Query q = new Query("Petition")
+		.addSort("dateCreationP", SortDirection.DESCENDING);
 
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		PreparedQuery pq = datastore.prepare(q);
@@ -248,22 +204,25 @@ public class ScoreEndpoint {
 
 	@ApiMethod(name = "topPetition", httpMethod = HttpMethod.GET)
 	public List<Entity> topPetition() {
-		Query q = new Query("Petition").addSort("auteur", SortDirection.DESCENDING);
+		Query q = new Query("Petition")
+		.addSort("dateCreationP", SortDirection.DESCENDING);//.addSort("auteur", SortDirection.DESCENDING);
 
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		PreparedQuery pq = datastore.prepare(q);
 		List<Entity> result = pq.asList(FetchOptions.Builder.withLimit(100));
 		return result;
 	}//Good
-	
+
 	@ApiMethod(name = "petitionTag", httpMethod = HttpMethod.GET)
 	public List<Entity> petitionTag(@Named("tag") String tag) throws Exception {//petitions
 
-			Query q = new Query("Petition").setFilter(new FilterPredicate("tag", FilterOperator.EQUAL, tag));
+		Query q = new Query("Petition")
+                .setFilter(new FilterPredicate("tag", FilterOperator.EQUAL, tag))
+                .addSort("dateCreationP", SortDirection.DESCENDING);
 			
 			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 			PreparedQuery pq = datastore.prepare(q);
-			List<Entity> result = pq.asList(FetchOptions.Builder.withLimit(10));
+			List<Entity> result = pq.asList(FetchOptions.Builder.withLimit(100));
 			return result;
 	}
 
@@ -295,14 +254,40 @@ public class ScoreEndpoint {
 
 	}//Good
 
-	
-	@ApiMethod(name = "getSignataire", httpMethod = HttpMethod.GET)
-	public Entity getSignataire(Signataire signataire) throws Exception {
+	@ApiMethod(name = "signatairePetition", httpMethod = ApiMethod.HttpMethod.GET)
+public SignataireResponse signatairePetition(@Named("pid") String pid, @Named("curseur") String curseur) {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-		GoogleIdToken.Payload payload =  TokenVerifier.verifyToken(signataire.token);
-		String email = payload.getEmail();
-		return null;
-	}
+    // Préparer la requête pour obtenir les signataires de la pétition
+    Query.Filter pidFilter = new Query.FilterPredicate("pid", Query.FilterOperator.EQUAL, pid);
+    Query query = new Query("Signataire").setFilter(pidFilter);
+
+    // Préparer la requête avec pagination
+    FetchOptions fetchOptions = FetchOptions.Builder.withLimit(10);
+
+    // Si le curseur n'est pas nul et non vide, l'utiliser pour la pagination
+    if (curseur != null && !curseur.trim().isEmpty() && !curseur.equals("''")) {
+        try {
+            fetchOptions.startCursor(Cursor.fromWebSafeString(curseur));
+        } catch (IllegalArgumentException e) {
+            // Si le curseur est invalide, retourner une réponse vide
+            return new SignataireResponse(new ArrayList<Entity>(), null);
+        }
+    }
+
+    PreparedQuery pq = datastore.prepare(query);
+    QueryResultList<Entity> results = pq.asQueryResultList(fetchOptions);
+
+    // Retourner les résultats trouvés avec le curseur pour la pagination suivante
+    if (!results.isEmpty()) {
+        String nextCursor = results.getCursor().toWebSafeString();
+        return new SignataireResponse(results, nextCursor);
+    } else {
+        // Si aucun signataire n'est trouvé, retourner une réponse vide
+        return new SignataireResponse(new ArrayList<Entity>(), null);
+    }
+}
+
 
 	@ApiMethod(name = "addPetition", httpMethod = HttpMethod.POST)
 	public Entity addPetition(Petition petition) throws Exception {
@@ -401,6 +386,7 @@ public class ScoreEndpoint {
     	}
     	datastore.put(txn, signataireEntity);
     	return signataireEntity;
+
 	}
 
 	private Key createPetitionKey(String pid) {

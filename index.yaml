@@ -11,7 +11,14 @@ indexes:
   - name: dateCreationP
     direction: desc
   - name: tag
+    direction: desc
+
+- kind: Petition
+  properties:
+  - name: tag
     direction: asc
+  - name: dateCreationP
+    direction: desc
 
 - kind: Signataire
   properties:

@@ -176,6 +176,7 @@
                         class: 'button is-link',
                         onclick: function (e) {
                             PetitionGame.play();
+                            Petition.loadList();
                             console.log("j'envoie ...  la demande depuis bouton");
                         }
                     }, "Submit Petition")
@@ -185,6 +186,7 @@
 
         var Petition = {
             list: [],
+            curseur: "",
             loadList: function () {
                 return m.request({
                     method: "GET",
@@ -209,20 +211,46 @@
                     console.log("got save Petition:", result)
                     Petition.loadList()
                     myPetition.loadList()
+                  
                 })
             },
-            searchByTag: function (tag) {
+            searchByTag: function(tag){
                 return m.request({
                     method: "GET",
-                    url: "_ah/api/myApi/v1/petitionTag",
-                    params: { tag: tag }
+                    url: "_ah/api/myApi/v1/petitionTag/"+tag,
                 }).then(function (result) {
                     Petition.list = result.items;
-                    console.log("got Petition by tag:", result);
-                    m.redraw(true);
                 })
+            },
+        }
+
+    var Signataire = {
+        list: [],
+        cursor: '',
+        email:'',
+        pid: '',
+        loadList: function (pid, cursor) {
+            //Signataire.pid = pid;
+            return m.request({
+                method: "GET",
+                url: "_ah/api/myApi/v1/signatairePetition/"+pid+"/"+cursor,
+                
+            }).then(function (result) {
+                
+                Signataire.list = result.entities[0].properties.emails;
+
+
+                Signataire.cursor = result.nextCursor;
+                console.log("got Signataires:", result);
+                m.redraw(true);
+            });
+        },
+        loadNextPage: function () {
+            if (Signataire.cursor) {
+                Signataire.loadList(Signataire.pid, Signataire.cursor);
             }
         }
+    };
 
         var myPetition = {
             list: [],
@@ -237,7 +265,7 @@
                 })
             }
         }
-
+    
         var MyPetitionView = {
             oninit: function () {
                 myPetition.loadList(PetitionGame.name);
@@ -256,6 +284,14 @@
                                 m('td', m('label', item.properties.nbSign)),
                                 m('td', m('label', item.properties.dateCreationP)),
                                 m('td', m('label', item.properties.tag)),
+                                m("button", {
+                                class: 'button is-link',
+                                onclick: function (e) {
+                                    Signataire.loadList(item.key.id, "''");
+                                    
+                                    console.log("j'envoie ...  la demande depuis bouton "+item.key.id);
+                                }
+                                }, "Qui a Signé ?")
                             ])
                         })
                     ])
@@ -296,6 +332,7 @@
                                                 pid: item.key.id
                                             }
                                         });
+                                        Petition.loadList()
                                     }
                                 }, "Voter"))
                             ])
@@ -304,33 +341,57 @@
                 ])
             }
         }
-
-        var PetitionSearchView = {
-            tag: '',
-            view: function () {
-                return m("div", [
-                    m("label", { class: 'level-item' }, "Search by Tag"),
-                    m("input", {
-                        type: "text",
-                        id: "searchTag",
-                        name: "searchTag",
-                        oninput: function (e) {
-                            PetitionSearchView.tag = e.target.value;
-                        },
-                        value: PetitionSearchView.tag,
-                        required: true
-                    }),
-                    m("button", {
-                        class: 'button is-link',
-                        onclick: function (e) {
-                            Petition.searchByTag(PetitionSearchView.tag);
-                            console.log("Searching petitions by tag...");
-                        }
-                    }, "Search")
-                ]);
-            }
-        };
-
+        var SignataireView = {
+        view: function () {
+            return m('div', [
+            m('div', { class: 'subtitle' }, "Signataires"),
+            m('table', { class: 'table is-striped' }, [
+                m('thead', m('tr', [
+                    m('th', { width: "50px" }, "Email")
+                ])),
+                m('tbody', Signataire.list.map(function (email) {
+                    return m('tr', [
+                        m('td', m('label', email))
+                    ]);
+                }))
+            ]),
+            m('button', {
+                class: 'button is-link',
+                onclick: function () {
+                    Signataire.loadNextPage();
+                }
+                }, "Next")
+            ]);
+        }
+    };
+    var PetitionSearchView = {
+    tag: '',
+    view: function () {
+        return m("div", [
+            m("label", { class: 'level-item' }, "Search by Tag"),
+            m("input", {
+                type: "text",
+                placeholder: "Enter tag",
+                value: PetitionSearchView.tag,
+                oninput: function (e) {
+                    PetitionSearchView.tag = e.target.value;
+                },
+                class: 'input'
+            }),
+            m("button", {
+                class: 'button is-link',
+                onclick: function (e) {
+                    if (PetitionSearchView.tag !== "") {
+                        Petition.searchByTag(PetitionSearchView.tag);
+                        console.log("Searching petitions by tag...");
+                    } else {
+                        Petition.loadList();
+                    }
+                }
+            }, "Search")
+        ]);
+    }
+};
         var Hello = {
             view: function () {
                 return m('div', { class: 'container' }, [
@@ -341,8 +402,10 @@
                         m("div", { class: 'tile' }, m('div', { class: 'tile is-child box' }, m(PetitionView))),
                     ]),
                     m("div", { class: 'tile' }, m('div', { class: 'tile is-child box' }, m(MyPetitionView))),
+                    m("div", { class: 'tile' }, m('div', { class: 'tile-is-child box' }, m(SignataireView))),
                 ]);
             }
+
         };
 
         m.route(document.getElementById("app"), "/login", {

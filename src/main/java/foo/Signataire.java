@@ -3,11 +3,12 @@ package foo;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.appengine.api.search.Cursor;
+
 public class Signataire {
     public List<String> emails;
     public String pid, token;
     public boolean free;
-    public int curseur;
 
 public Signataire(){
     emails = new ArrayList<String>();
