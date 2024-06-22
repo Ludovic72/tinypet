@@ -30,3 +30,4 @@ Ca marche
 Ca marche
 
 
+// Attention le code back se trouve dans ScoreEndPoint. Le front est la page index3.html
